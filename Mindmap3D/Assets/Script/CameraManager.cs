@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+public class CameraManager : MonoBehaviour // カメラの基本管理機能
 {
     public float moveSpeed = 10f; 
     public float lookSpeed = 2f;
