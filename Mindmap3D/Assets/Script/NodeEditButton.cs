@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeEditButton : MonoBehaviour // ノードを編集するボタンの管理
+// ノードを編集するボタンの管理・UIボタンにアタッチ
+public class NodeEditButton : MonoBehaviour
 {
     public GameObject nodePrefab;
     public Transform parentTransform;

@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LinkManager : MonoBehaviour // リンクの生成と管理
+// リンクの生成と管理・シーン上の空オブジェクトにアタッチ
+public class LinkManager : MonoBehaviour
 {
     public GameObject linkPrefab; 
     private List<GameObject> links = new List<GameObject>(); // 作成されたリンクのリスト

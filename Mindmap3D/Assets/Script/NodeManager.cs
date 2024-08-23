@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeManager : MonoBehaviour // ノードの基本管理機能
+// ノードの基本管理機能・ノードプレハブにアタッチ
+public class NodeManager : MonoBehaviour
 {
     public bool isSelected = false;
     public Color defaultColor = Color.white;

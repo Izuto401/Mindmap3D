@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeLookCamera : MonoBehaviour // ノードにカメラを向かせる機能 
+// ノードにカメラを向かせる機能・ノードプレハブにアタッチ 
+public class NodeLookCamera : MonoBehaviour 
 {
     private Camera mainCamera;
 
