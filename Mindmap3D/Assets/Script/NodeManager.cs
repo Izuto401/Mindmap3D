@@ -21,28 +21,34 @@ public class NodeManager : MonoBehaviour // ノードの基本管理機能
         UpdateColor();
     }
 
-    public void Select() //ノード選択時
+    // ノード選択時
+    public void Select()
     {
         isSelected = true;
         UpdateColor();
     }
-    public void DeSelect() //ノードの選択解除時
+
+    // ノードの選択解除時
+    public void DeSelect()
     {
         isSelected = false;
         UpdateColor();
     }
 
-    public void SetDefaultColor() //ノードのデフォルト色
+    // ノードのデフォルト色
+    public void SetDefaultColor()
     {
         nodeRenderer.material.color = defaultColor;
     }
 
-    private void UpdateColor() //ノードを選択時に色変更
+    // ノードを選択時に色変更
+    private void UpdateColor()
     {
         nodeRenderer.material.color = isSelected ? selectedColor : defaultColor;
     }
 
-    void OnMouseDown() //クリック時のアクション
+    // クリック時のアクション
+    void OnMouseDown()
     {
         if (!isSelected)
         {

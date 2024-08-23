@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeOutline : MonoBehaviour
+public class NodeOutline : MonoBehaviour // ノードを選択中に表示するアウトラインの機能
 {
     public GameObject outlineObject;
 

@@ -7,12 +7,14 @@ public class NodeEditButton : MonoBehaviour // ノードを編集するボタン
     public GameObject nodePrefab;
     public Transform parentTransform;
 
-    public void AddNode(Vector3 position) // ノード追加
+    // ノード追加
+    public void AddNode(Vector3 position)
     {
         Instantiate(nodePrefab, position, Quaternion.identity, parentTransform);
     }
 
-    public void DeleteNode(GameObject node) // ノード削除
+    // ノード削除
+    public void DeleteNode(GameObject node) 
     {
         Destroy(node);
     }
