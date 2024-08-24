@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class NodeInputHandler : MonoBehaviour // ノード編集・名前変更機能
+// ノード編集・名前変更機能・ノードプレハブにアタッチ
+public class NodeInputHandler : MonoBehaviour
 {
     public TMP_InputField inputField;
     private bool isEditing = false;
@@ -21,7 +22,8 @@ public class NodeInputHandler : MonoBehaviour // ノード編集・名前変更�
         }
     }
 
-    void OnMouseDown() // クリック時のアクション
+    // クリック時のアクション
+    void OnMouseDown()
     {
         if (!isEditing)
         {
@@ -29,14 +31,16 @@ public class NodeInputHandler : MonoBehaviour // ノード編集・名前変更�
         }
     }
 
-    private void StartEditing() // 編集開始時の処理
+    // 編集開始時の処理
+    private void StartEditing()
     {
         inputField.gameObject.SetActive(true);
         inputField.ActivateInputField();
         isEditing = true;
     }
 
-    private void EndEditing() // 編集終了時の処理
+    // 編集終了時の処理
+    private void EndEditing()
     {
         inputField.DeactivateInputField();
         inputField.gameObject.SetActive(false);
