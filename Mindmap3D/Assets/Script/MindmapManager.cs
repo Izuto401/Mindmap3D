@@ -30,13 +30,18 @@ public class MindmapManager : MonoBehaviour
 
     void Start()
     {
-        // 初期ノードを生成し、位置を設定
-        GameObject node1 = Instantiate(nodePrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        NodeManager nodeScript1 = node1.GetComponent<NodeManager>();
-        nodeScript1.id = 1;
-        nodeScript1.position = new Vector3(0, 0, 0);
-        nodeScript1.nodeName = "Initial Node";
-        initialNode = nodeScript1; // 初期ノードとして登録
+        // シーン上に存在する初期ノードを検索して参照する
+        initialNode = FindObjectOfType<NodeManager>();
+
+        if (initialNode != null)
+        {
+            initialNode.id = 1; // 必要に応じてIDを設定
+            initialNode.nodeName = "Initial Node"; // 必要に応じて名前を設定
+        }
+        else
+        {
+            Debug.LogError("初期ノードがシーン上に見つかりませんでした。");
+        }
     }
 
     // ノードを選択するメソッド
