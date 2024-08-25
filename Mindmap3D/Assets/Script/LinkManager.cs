@@ -2,32 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// リンクの生成と管理・シーン上の空オブジェクトにアタッチ
+/// <summary>
+/// ノード間のリンクを管理し、リンクの表示を制御するスクリプト。
+/// </summary>
 public class LinkManager : MonoBehaviour
 {
-    public GameObject linkPrefab; 
-    private List<GameObject> links = new List<GameObject>(); // 作成されたリンクのリスト
+    public NodeManager nodeA; // リンクの開始ノード
+    public NodeManager nodeB; // リンクの終了ノード
 
-    // ノード間にリンクを作成
-    public void CreateLink(GameObject nodeA, GameObject nodeB)
+    private LineRenderer lineRenderer;
+
+    void Start()
     {
-        GameObject newLink = Instantiate(linkPrefab);
-        links.Add(newLink);
-        UpdateLink(newLink, nodeA.transform.position, nodeB.transform.position);
+        // 既存の LineRenderer コンポーネントを取得
+        lineRenderer = GetComponent<LineRenderer>();
+        if (lineRenderer == null)
+        {
+            lineRenderer = gameObject.AddComponent<LineRenderer>();
+        }
+        lineRenderer.positionCount = 2; // リンクは2つのポイントを持つ
+        lineRenderer.startWidth = 0.1f; // ラインの太さを設定
+        lineRenderer.endWidth = 0.1f;
+
+        // シンプルなマテリアルの設定
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.startColor = Color.white;
+        lineRenderer.endColor = Color.white;
     }
 
-    // リンクの位置と長さを更新
-    public void UpdateLink(GameObject link, Vector3 start, Vector3 end)
+    void Update()
     {
-        link.transform.position = (start + end) / 2;
-        link.transform.right = (end - start).normalized;
-        link.transform.localScale = new Vector3(Vector3.Distance(start, end), 0.1f, 0.1f);
-    }
-
-    // 不要になったリンクの削除
-    public void RemoveLink(GameObject link)
-    {
-        links.Remove(link);
-        Destroy(link);
+        if (nodeA != null && nodeB != null)
+        {
+            // ラインの位置をノードの位置に合わせて更新
+            Vector3[] positions = new Vector3[2];
+            positions[0] = nodeA.transform.position;
+            positions[1] = nodeB.transform.position;
+            lineRenderer.SetPositions(positions);
+        }
     }
 }
