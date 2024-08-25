@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// カメラの移動と回転を制御するスクリプト。
+/// </summary>
 public class CameraController : MonoBehaviour
 {
     public float moveSpeed = 10f; // カメラの移動速度

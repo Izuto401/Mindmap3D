@@ -255,6 +255,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 129683089}
   m_CullTransparentMesh: 1
+--- !u!114 &421489370 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -4373072353330973932, guid: ccda7475f470747a3bbc01f8cd3e5488, type: 3}
+  m_PrefabInstance: {fileID: 1656077684}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f2ffa04ca7144b78978c297ab4158f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &466860001
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,7 +799,7 @@ MonoBehaviour:
   m_SubmitButton: Submit
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
+  m_RepeatDelay: 0.01
   m_ForceModuleActive: 0
 --- !u!114 &1141844066
 MonoBehaviour:
@@ -927,7 +938,7 @@ MonoBehaviour:
   nodePrefab: {fileID: 367902739847292210, guid: ccda7475f470747a3bbc01f8cd3e5488, type: 3}
   linkPrefab: {fileID: 2147825935654134879, guid: dddd50d5887bc448182f7c44e4ffacd2, type: 3}
   warningMessage: {fileID: 1780627617}
-  initialNode: {fileID: 0}
+  initialNode: {fileID: 421489370}
   selectedNode: {fileID: 0}
 --- !u!4 &1438943812
 Transform:

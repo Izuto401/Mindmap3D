@@ -1,42 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; // TextMeshProを使用するためのライブラリ
-using UnityEngine.UI; // UI要素を使用するためのライブラリ
+using TMPro; 
+using UnityEngine.UI; 
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// 各ノードの管理を行い、ノードの選択やリンクの管理をするスクリプト。
+/// </summary>
 public class NodeManager : MonoBehaviour, IPointerClickHandler
 {
     public int id; // ノードのID（識別用）
     public Vector3 position; // ノードの現在の位置
     public string nodeName; // ノードの名前（表示されるテキスト）
     public List<LinkManager> links = new List<LinkManager>(); // このノードに接続されているリンクのリスト
+    public Image outlineImage; // Outline画像用の変数
 
     private TextMeshPro textMesh; // ノード上に表示されるテキストのコンポーネント
     private Image nodeBackground; // ノードの背景画像（色を変更するために使用）
-    private Color defaultColor = Color.white; // デフォルトの色
-    private Color selectedColor = Color.green; // 選択されたときの色
-
+    private Color defaultColor = Color.white; // 背景のデフォルトの色
+    private Color selectedColor = Color.green; // 背景の選択されたときの色
+    private Color originalColor; // アウトラインの元の色を保持
+    private Color hoverColor; // アウトラインのカーソルを合わせた際の半透明色
     private bool isSelected = false; // ノードが選択されているかどうかを示すフラグ
     private TMP_InputField inputField; // ノードの名前を編集するための入力フィールド
-    public Image outlineImage; // Outline画像用の変数
 
     void Start()
     {
-        // MeshColliderがアタッチされているか確認し、なければ追加
-        MeshCollider meshCollider = GetComponent<MeshCollider>();
-        if (meshCollider == null)
-        {
-            meshCollider = gameObject.AddComponent<MeshCollider>();
-            meshCollider.convex = true; // ColliderをConvexに設定する（必要に応じて）
-        }
-
         // NodeBackgroundのImageコンポーネントを取得
         nodeBackground = transform.Find("NodeBackground").GetComponent<Image>();
-        if (nodeBackground == null)
-        {
-            Debug.LogError("NodeBackground Image component is missing on " + gameObject.name);
-        }
 
         // 子オブジェクトにあるTextMeshProコンポーネントを取得
         textMesh = GetComponentInChildren<TextMeshPro>();
@@ -59,6 +51,8 @@ public class NodeManager : MonoBehaviour, IPointerClickHandler
         if (outlineImage != null)
         {
             outlineImage.gameObject.SetActive(false); // 初期状態で非表示にする
+            originalColor = outlineImage.color; // 現在の色を保存
+            hoverColor = new Color(originalColor.r, originalColor.g, originalColor.b, 0.5f); // 半透明に設定
         }
 
         transform.position = position;
@@ -159,10 +153,8 @@ public class NodeManager : MonoBehaviour, IPointerClickHandler
 
     public void Select()
     {
-        if (nodeBackground != null)
-        {
-            nodeBackground.color = selectedColor; // 選択色に変更
-        }
+        nodeBackground.color = selectedColor; // 選択色に変更
+        outlineImage.gameObject.SetActive(true);
         Debug.Log("select!");
     }
 
@@ -171,18 +163,30 @@ public class NodeManager : MonoBehaviour, IPointerClickHandler
     {
         isSelected = false;
 
-        if (outlineImage != null)
-        {
-            outlineImage.gameObject.SetActive(false); // ノードの選択が解除されたらOutline画像を非表示にする
-        }
-
-        // テキスト編集用のInputFieldを非表示にする
-        if (inputField != null)
-        {
-            inputField.gameObject.SetActive(false);
-        }
-
+        inputField.gameObject.SetActive(false);
+        outlineImage.gameObject.SetActive(false); // ノードの選択が解除されたらOutline画像を非表示にする
+        outlineImage.color = originalColor; // 選択解除時にアウトラインを通常の色に設定
         SetDefaultColor();
         Debug.Log("Deselect!");
+    }
+
+    // カーソルがノードに入ったときに呼ばれるメソッド
+    void OnMouseEnter()
+    {
+        if (outlineImage != null)
+        {
+            outlineImage.color = hoverColor; // カーソルが重なったときにアウトラインを半透明に設定
+            outlineImage.gameObject.SetActive(true);
+        }
+    }
+
+    // カーソルがノードから出たときに呼ばれるメソッド
+    void OnMouseExit()
+    {
+        if (outlineImage != null)
+        {
+            outlineImage.color = originalColor; // カーソルが離れたときにアウトラインを元の色に戻す
+            outlineImage.gameObject.SetActive(false);
+        }
     }
 }

@@ -1,8 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; // TextMeshProを使用するために必要
+using TMPro;
 
+/// <summary>
+/// マインドマップ全体の管理を行うスクリプト。
+/// ノードの追加・削除や、選択されたノードの管理を行います。
+/// </summary>
 public class MindmapManager : MonoBehaviour
 {
     // シングルトンインスタンス
@@ -66,7 +70,7 @@ public class MindmapManager : MonoBehaviour
     }
 
 
-    // ボタンに設定するメソッド
+    // ボタンに設定するノード追加メソッド
     public void AddNode()
     {
         if (selectedNode != null)
@@ -88,7 +92,7 @@ public class MindmapManager : MonoBehaviour
     }
 
 
-    // ノードを削除するメソッド
+    // ボタンに設定するノード削除メソッド
     public void RemoveNode()
     {
         // 初期ノードが選択されている場合、削除不可の処理を行う

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ノード間のリンクを管理し、リンクの表示を制御するスクリプト。
+/// </summary>
 public class LinkManager : MonoBehaviour
 {
     public NodeManager nodeA; // リンクの開始ノード
