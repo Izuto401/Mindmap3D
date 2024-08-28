@@ -200,7 +200,7 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   nodeName: 
   links: []
-  outlineImage: {fileID: 0}
+  outlineImage: {fileID: 2475647410095858644}
 --- !u!1 &367902739994450058
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,7 +728,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enter text...
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5acff852487124bcdb89dbddee83ffdf, type: 2}
   m_sharedMaterial: {fileID: -7786892333198751292, guid: 5acff852487124bcdb89dbddee83ffdf, type: 2}
