@@ -150,7 +150,7 @@ RectTransform:
   m_GameObject: {fileID: 129683089}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 619472011}
@@ -158,8 +158,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 800, y: 500}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 890, y: 475}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &129683091
 MonoBehaviour:
@@ -323,7 +323,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: RemoveNode
+  m_text: "\u30FC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5acff852487124bcdb89dbddee83ffdf, type: 2}
   m_sharedMaterial: {fileID: -7786892333198751292, guid: 5acff852487124bcdb89dbddee83ffdf, type: 2}
@@ -457,7 +457,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: AddNode
+  m_text: +
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5acff852487124bcdb89dbddee83ffdf, type: 2}
   m_sharedMaterial: {fileID: -7786892333198751292, guid: 5acff852487124bcdb89dbddee83ffdf, type: 2}
@@ -622,7 +622,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -963,6 +963,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4373072353330973932, guid: ccda7475f470747a3bbc01f8cd3e5488, type: 3}
+      propertyPath: nodeName
+      value: Mindmap
+      objectReference: {fileID: 0}
+    - target: {fileID: -4373072353330973932, guid: ccda7475f470747a3bbc01f8cd3e5488, type: 3}
+      propertyPath: outlineImage
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 367902739847292210, guid: ccda7475f470747a3bbc01f8cd3e5488, type: 3}
       propertyPath: m_Name
       value: NodePrefab
@@ -1047,6 +1055,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 367902739847292223, guid: ccda7475f470747a3bbc01f8cd3e5488, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 367902739994450100, guid: ccda7475f470747a3bbc01f8cd3e5488, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 8192
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1080,7 +1096,7 @@ RectTransform:
   m_GameObject: {fileID: 1681166694}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 466860002}
@@ -1088,8 +1104,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 800, y: 400}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 890, y: 350}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1681166696
 MonoBehaviour:
@@ -1323,8 +1339,8 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1060808266}
   - {fileID: 963194228}
   - {fileID: 1438943812}
   - {fileID: 1141844067}
-  - {fileID: 1060808266}
   - {fileID: 1656077684}
