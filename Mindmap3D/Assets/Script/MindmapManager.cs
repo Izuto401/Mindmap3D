@@ -16,8 +16,9 @@ public class MindmapManager : MonoBehaviour
     public GameObject linkPrefab; // リンクのプレハブを保持
     public TextMeshProUGUI warningMessage; // 削除不可メッセージを表示するTextMeshProUGUIコンポーネント
     public NodeManager initialNode; // 初期表示のノード（削除不可に設定）
-
     public NodeManager selectedNode; // 現在選択されているノードを保持
+    public NodeManager isSelected;
+    public TextMeshProUGUI editingModeText; // 文字編集モードを表示するUI
 
     // シングルトンインスタンスの初期化
     private void Awake()
@@ -69,6 +70,20 @@ public class MindmapManager : MonoBehaviour
         selectedNode.Select(); // 新しいノードを選択
     }
 
+    public void DeselectNode()
+    {
+        if (selectedNode != null)
+        {
+            selectedNode.Deselect();
+            selectedNode = null;
+
+            // 編集モードの表示を非表示にする
+            if (editingModeText != null)
+            {
+                editingModeText.gameObject.SetActive(false);
+            }
+        }
+    }
 
     // ボタンに設定するノード追加メソッド
     public void AddNode()
@@ -125,6 +140,19 @@ public class MindmapManager : MonoBehaviour
             // ノード自体を削除
             Destroy(selectedNode.gameObject);
             selectedNode = null; // 選択ノードをリセット
+        }
+    }
+
+    // 文字編集モードの表示を制御するメソッド
+    public void ShowEditingMode(bool show)
+    {
+        if (editingModeText != null)
+        {
+            editingModeText.gameObject.SetActive(show);
+            if (show)
+            {
+                editingModeText.text = "文字編集モード";
+            }
         }
     }
 
