@@ -22,7 +22,7 @@ public class NodeManager : MonoBehaviour, IPointerClickHandler
     private Color selectedColor = Color.green; // 背景の選択されたときの色
     private Color originalColor; // アウトラインの元の色を保持
     private Color hoverColor; // アウトラインのカーソルを合わせた際の半透明色
-    private bool isSelected = false; // ノードが選択されているかどうかを示すフラグ
+    public bool isSelected = false; // ノードが選択されているかどうかを示すフラグ
     private TMP_InputField inputField; // ノードの名前を編集するための入力フィールド
 
     void Start()
@@ -44,6 +44,7 @@ public class NodeManager : MonoBehaviour, IPointerClickHandler
             inputField.text = nodeName; // 初期状態でInputFieldにノード名を設定
             inputField.gameObject.SetActive(false); // 初期は非表示にする
             inputField.onEndEdit.AddListener(OnEndEdit); // 編集終了時の処理を設定
+            inputField.onSelect.AddListener(delegate { LockSelection(true); }); // 編集開始時に選択状態を固定
         }
 
         // Outline画像を探す（プレハブ内に配置されていることが前提）
@@ -80,6 +81,7 @@ public class NodeManager : MonoBehaviour, IPointerClickHandler
             inputField.gameObject.SetActive(true);
             inputField.Select();
             inputField.ActivateInputField();
+            MindmapManager.Instance.ShowEditingMode(true);
         }
     }
 
@@ -131,6 +133,8 @@ public class NodeManager : MonoBehaviour, IPointerClickHandler
 
         // ノードの選択を解除
         Deselect();
+        LockSelection(false); // 編集終了時に選択状態を解除
+        MindmapManager.Instance.ShowEditingMode(false); // 編集モードを非表示
     }
 
     // このノードにリンクを追加するメソッド
@@ -187,6 +191,27 @@ public class NodeManager : MonoBehaviour, IPointerClickHandler
         {
             outlineImage.color = originalColor; // カーソルが離れたときにアウトラインを元の色に戻す
             outlineImage.gameObject.SetActive(false);
+        }
+    }
+
+    // ノード選択状態を固定するメソッド
+    public void LockSelection(bool lockSelection)
+    {
+        isSelected = lockSelection;
+
+        if (outlineImage != null)
+        {
+            outlineImage.gameObject.SetActive(lockSelection); // 選択状態に応じてOutline画像を表示
+        }
+
+        if (lockSelection)
+        {
+            // 文字編集モードに入ったときに他のノードを選択解除
+            MindmapManager.Instance.SelectNode(this);
+        }
+        else
+        {
+            SetDefaultColor();
         }
     }
 }

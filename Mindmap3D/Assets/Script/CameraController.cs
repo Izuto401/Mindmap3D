@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 /// <summary>
 /// カメラの移動と回転を制御するスクリプト。
@@ -15,6 +16,17 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        // 文字編集中かどうかを確認
+        if (MindmapManager.Instance.selectedNode != null)
+        {
+            TMP_InputField inputField = MindmapManager.Instance.selectedNode.GetComponentInChildren<TMP_InputField>();
+            if (inputField != null && inputField.isFocused)
+            {
+                // 文字編集中はカメラの動きを停止
+                return;
+            }
+        }
+
         // WASDキーでカメラの移動
         float moveX = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
         float moveZ = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
