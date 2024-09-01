@@ -91,6 +91,7 @@ public class NodeManager : MonoBehaviour, IPointerClickHandler
         if (isSelected)
         {
             Deselect();
+            CameraController.Instance.ResetNodePosition();
         }
         else
         {
@@ -111,6 +112,7 @@ public class NodeManager : MonoBehaviour, IPointerClickHandler
 
             // MindmapManagerに通知して、このノードを選択されたノードとして登録
             MindmapManager.Instance.SelectNode(this);
+            CameraController.Instance.SetNodePosition(this.transform.position); // カメラに中心点を設定
 
             if (inputField != null)
             {
