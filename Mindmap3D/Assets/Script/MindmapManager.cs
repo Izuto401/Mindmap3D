@@ -17,19 +17,20 @@ public class MindmapManager : MonoBehaviour
     public TextMeshProUGUI warningMessage; // 削除不可メッセージを表示するTextMeshProUGUIコンポーネント
     public NodeManager initialNode; // 初期表示のノード（削除不可に設定）
     public NodeManager selectedNode; // 現在選択されているノードを保持
+    private Vector3 nodePosition;
     public NodeManager isSelected;
     public TextMeshProUGUI editingModeText; // 文字編集モードを表示するUI
 
     // シングルトンインスタンスの初期化
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this; // このスクリプトを実行しているオブジェクトをインスタンスとして設定
+            Destroy(this.gameObject);
         }
-        else if (Instance != this)
+        else
         {
-            Destroy(gameObject); // 既にインスタンスが存在する場合、重複を避けるためにこのオブジェクトを破棄
+            Instance = this;
         }
     }
 
@@ -59,15 +60,18 @@ public class MindmapManager : MonoBehaviour
             {
                 selectedNode.Deselect();
                 selectedNode = null; // 選択解除
+                CameraController.Instance.ResetNodePosition(); // カメラに選択解除を通知
                 return; // ここで終了
             }
 
             // 別のノードを選択しようとしている場合
             selectedNode.Deselect(); // 以前の選択を解除
+            CameraController.Instance.ResetNodePosition(); // カメラに選択解除を通知
         }
 
         selectedNode = node;
         selectedNode.Select(); // 新しいノードを選択
+        nodePosition = node.transform.position; // ノードの位置を取得
     }
 
     public void DeselectNode()
@@ -76,6 +80,7 @@ public class MindmapManager : MonoBehaviour
         {
             selectedNode.Deselect();
             selectedNode = null;
+            CameraController.Instance.ResetNodePosition(); // カメラに選択解除を通知
 
             // 編集モードの表示を非表示にする
             if (editingModeText != null)

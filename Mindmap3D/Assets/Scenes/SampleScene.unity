@@ -1030,6 +1030,8 @@ MonoBehaviour:
   warningMessage: {fileID: 1780627617}
   initialNode: {fileID: 0}
   selectedNode: {fileID: 0}
+  isSelected: {fileID: 0}
+  editingModeText: {fileID: 1780627617}
 --- !u!4 &1438943812
 Transform:
   m_ObjectHideFlags: 0
