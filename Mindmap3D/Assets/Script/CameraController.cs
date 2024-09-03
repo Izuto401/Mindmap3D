@@ -14,8 +14,8 @@ public class CameraController : MonoBehaviour
     public float rotationSpeed = 50f; // ノードの周りを回転する速度
 
     private Vector3 nodePosition;
-    private float rotationX = 0f;
-    private float rotationY = 0f;
+    private float rotationX;
+    private float rotationY;
     private bool isNodeSelected = false;
 
 
@@ -33,6 +33,12 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        // 現在のカメラの回転角度を取得
+        Vector3 currentRotation = transform.localEulerAngles;
+        rotationX = currentRotation.y;
+        rotationY = currentRotation.x;
+
+
         // 文字編集中かどうかを確認
         if (MindmapManager.Instance.selectedNode != null)
         {
@@ -84,7 +90,7 @@ public class CameraController : MonoBehaviour
             {
                 rotationX += Input.GetAxis("Mouse X") * lookSpeed;
                 rotationY -= Input.GetAxis("Mouse Y") * lookSpeed;
-                rotationY = Mathf.Clamp(rotationY, -90f, 90f); // カメラの上下回転を制限
+                //rotationY = Mathf.Clamp(rotationY, -90f, 90f); // カメラの上下回転を制限
                 transform.localEulerAngles = new Vector3(rotationY, rotationX, 0);
             }
         }
