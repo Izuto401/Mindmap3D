@@ -91,7 +91,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &367902739847292220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +201,7 @@ MonoBehaviour:
   nodeName: 
   links: []
   outlineImage: {fileID: 2475647410095858644}
+  isSelected: 0
 --- !u!1 &367902739994450058
 GameObject:
   m_ObjectHideFlags: 0
