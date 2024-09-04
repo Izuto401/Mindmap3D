@@ -65,7 +65,7 @@ public class LinkManager : MonoBehaviour, IPointerClickHandler
             linkCanvas.transform.position = middlePoint;
 
             // Canvasが常にカメラに向くようにする
-            linkCanvas.transform.LookAt(Camera.main.transform);
+            //linkCanvas.transform.LookAt(Camera.main.transform);
 
             // InputFieldの位置をCanvasの中心に設定
             relationshipInputField.transform.position = linkCanvas.transform.position;
