@@ -25,8 +25,12 @@ public class NodeManager : MonoBehaviour, IPointerClickHandler
     public bool isSelected = false; // ノードが選択されているかどうかを示すフラグ
     private TMP_InputField inputField; // ノードの名前を編集するための入力フィールド
 
+    private Renderer nodeRenderer;
+
     void Start()
     {
+        nodeRenderer = GetComponent<Renderer>();
+
         // NodeBackgroundのImageコンポーネントを取得
         nodeBackground = transform.Find("NodeBackground").GetComponent<Image>();
 
@@ -87,6 +91,12 @@ public class NodeManager : MonoBehaviour, IPointerClickHandler
 
     private void OnMouseDown()
     {
+        // ノード移動モードの場合のみ選択を行う
+        if (MindmapManager.Instance.isNodeMoveMode)
+        {
+            MindmapManager.Instance.SelectNode(this);
+        }
+
         // 既に選択されている場合は選択を解除
         if (isSelected)
         {

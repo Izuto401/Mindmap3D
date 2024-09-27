@@ -16,8 +16,8 @@ public class CameraController : MonoBehaviour
     private Vector3 nodePosition;
     private float rotationX;
     private float rotationY;
-    private bool isNodeSelected = false;
-
+    public bool isNodeSelected = false;
+    public bool isNodeMoveMode = false;
 
     private void Awake()
     {
@@ -29,6 +29,20 @@ public class CameraController : MonoBehaviour
         {
             Instance = this;
         }
+    }
+
+    private void Start()
+    {
+        // MindmapManagerのイベントにサブスクライブ
+        if (MindmapManager.Instance != null)
+        {
+            MindmapManager.Instance.OnNodeMoveModeChanged += HandleNodeMoveModeChanged;
+        }
+    }
+
+    private void HandleNodeMoveModeChanged(bool newNodeMoveMode)
+    {
+        isNodeMoveMode = newNodeMoveMode;
     }
 
     void Update()
@@ -64,10 +78,39 @@ public class CameraController : MonoBehaviour
         Debug.Log("isNodeSelected = false;");
     }
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
-        if (isNodeSelected)
+        if (isNodeMoveMode && isNodeSelected)
         {
+            // ノード移動モードの操作
+            Vector3 newPosition = nodePosition;
+
+            // WASDキーでカメラから見た平面上の移動を制御
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
+
+            Vector3 forward = transform.forward;
+            Vector3 right = transform.right;
+
+            // forwardとrightのY成分を無視して平面上の移動を計算
+            forward.y = 0f;
+            right.y = 0f;
+            forward.Normalize();
+            right.Normalize();
+
+            Vector3 movement = (forward * vertical + right * horizontal) * moveSpeed * Time.deltaTime;
+            newPosition += movement;
+
+            // マウスホイールで奥行きを制御
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            newPosition += transform.forward * scroll * moveSpeed;
+
+            nodePosition = newPosition;
+            MindmapManager.Instance.selectedNode.transform.position = newPosition;
+        }
+        else if (isNodeSelected)
+        {
+            // ノード選択時のカメラ操作（ノードの周りを回転）
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
 
