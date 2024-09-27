@@ -20,6 +20,10 @@ public class MindmapManager : MonoBehaviour
     private Vector3 nodePosition;
     public NodeManager isSelected;
     public TextMeshProUGUI editingModeText; // 文字編集モードを表示するUI
+    public event System.Action<bool> OnNodeMoveModeChanged;
+
+    public bool isNodeMoveMode = false; // ノード移動モードのフラグ
+
 
     // シングルトンインスタンスの初期化
     private void Awake()
@@ -50,6 +54,33 @@ public class MindmapManager : MonoBehaviour
         }
     }
 
+    // ノード移動モードの切り替え
+    public void ToggleNodeMoveMode()
+    {
+        isNodeMoveMode = !isNodeMoveMode;
+        OnNodeMoveModeChanged?.Invoke(isNodeMoveMode);
+
+        if (isNodeMoveMode)
+        {
+            // ノード移動モードに入った際の処理
+            if (editingModeText != null)
+            {
+                editingModeText.gameObject.SetActive(true);
+                editingModeText.text = "ノード移動モード";
+                Debug.Log("moveNodemode!");
+            }
+        }
+        else
+        {
+            // ノード移動モードを解除した際の処理
+            if (editingModeText != null)
+            {
+                editingModeText.gameObject.SetActive(false);
+                Debug.Log("NotmoveNodemode!");
+            }
+        }
+    }
+
     // ノードを選択するメソッド
     public void SelectNode(NodeManager node)
     {
@@ -72,6 +103,12 @@ public class MindmapManager : MonoBehaviour
         selectedNode = node;
         selectedNode.Select(); // 新しいノードを選択
         nodePosition = node.transform.position; // ノードの位置を取得
+
+        // ノード移動モードの場合、カメラに通知
+        if (isNodeMoveMode)
+        {
+            CameraController.Instance.SetNodePosition(node.transform.position);
+        }
     }
 
     public void DeselectNode()
