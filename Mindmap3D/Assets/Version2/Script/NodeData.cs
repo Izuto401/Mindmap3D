@@ -21,4 +21,9 @@ public class NodeData : ScriptableObject
 
     // 親ノードの識別子
     public int parentNodeId;
+
+    // ノードの位置
+    public float positionX;
+    public float positionY;
+    public float positionZ;
 }
