@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
     // ノード編集用の入力フィールド
-    public InputField nodeNameInputField;
+    public  TMP_InputField nodeNameInputField;
 
     // メッセージ出力欄
-    public Text outputMessage;
+    public TextMeshProUGUI outputMessage;
 
     // NodeManagerの参照
     private NodeManager nodeManager;

@@ -28,16 +28,26 @@ public class NodeManager : MonoBehaviour
     }
 
     // 新しいノードを追加するメソッド
-    public void AddNode(Vector3 position)
+    public void AddNode()
     {
-        GameObject newNode = Instantiate(nodePrefab, position, Quaternion.identity, nodeContainer);
-        nodes.Add(newNode);
+        GameObject newNode = Instantiate(nodePrefab, nodeContainer);
+        newNode.transform.position = Random.insideUnitSphere * 5f; // ノードをランダムな位置に配置
+        Nodes.Add(newNode);
 
         // 選択されているノードがある場合、リンクを作成
         if (selectedNode != null)
         {
             CreateLink(selectedNode, newNode);
         }
+    }
+
+    // 引数付きのAddNode関数
+    public GameObject AddNode(Vector3 position)
+    {
+        GameObject newNode = Instantiate(nodePrefab, nodeContainer);
+        newNode.transform.position = position;
+        Nodes.Add(newNode);
+        return newNode;
     }
 
     // ノードを削除するメソッド
