@@ -221,6 +221,7 @@ GameObject:
   - component: {fileID: 7596961436228128755}
   - component: {fileID: 9072460424826456483}
   - component: {fileID: 4276588551008430511}
+  - component: {fileID: 7769022238709284283}
   m_Layer: 5
   m_Name: NodePrefab
   m_TagString: Untagged
@@ -294,7 +295,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4276588551008430511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,3 +313,24 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!65 &7769022238709284283
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5611036482316447899}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 200, y: 100, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
