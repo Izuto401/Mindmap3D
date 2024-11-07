@@ -29,6 +29,7 @@ public class NodeManager : MonoBehaviour
     // すべてのノードとリンクを保持するリスト
     private List<GameObject> nodes = new List<GameObject>();
     private List<GameObject> nodeLinks = new List<GameObject>();
+    private List<GameObject> selectedNodes = new List<GameObject>(); // 複数選択されたノードを保持するリスト
 
     // メインノードと選択されたノードの参照
     private GameObject mainNode;
@@ -56,7 +57,7 @@ public class NodeManager : MonoBehaviour
     // 新しいノードを追加するメソッド
     public void AddNode()
     {
-        Vector3 randomPosition = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), Random.Range(-5f, 5f));
+        Vector3 randomPosition = new Vector3(Random.Range(-100f, 100f), Random.Range(-100f, 100f), Random.Range(-100f, 100f));
         AddNode(randomPosition);
     }
 
@@ -68,9 +69,12 @@ public class NodeManager : MonoBehaviour
         nodes.Add(newNode);
 
         // 選択されているノードがある場合、リンクを作成
-        if (selectedNode != null)
+        if (selectedNodes.Count > 0)
         {
-            CreateLink(selectedNode, newNode);
+            foreach (var selectedNode in selectedNodes)
+            {
+                CreateLink(selectedNode, newNode);
+            }
         }
 
         return newNode;
@@ -79,18 +83,35 @@ public class NodeManager : MonoBehaviour
     // ノードを削除するメソッド
     public void RemoveNode()
     {
-        if (selectedNode != null)
+        foreach (var node in selectedNodes)
         {
-            nodes.Remove(selectedNode);
-            Destroy(selectedNode);
-            selectedNode = null;
+            nodes.Remove(node);
+            Destroy(node);
         }
+        selectedNodes.Clear();
+        UpdateOutputMessage();
     }
 
     // ノードを選択するメソッド
-    public void SelectNode(GameObject node)
+    public void SelectNode(GameObject node, bool isCtrlPressed)
     {
-        selectedNode = node;
+        if (isCtrlPressed)
+        {
+            if (selectedNodes.Contains(node))
+            {
+                selectedNodes.Remove(node);
+            }
+            else
+            {
+                selectedNodes.Add(node);
+            }
+        }
+        else
+        {
+            selectedNodes.Clear();
+            selectedNodes.Add(node);
+        }
+        UpdateOutputMessage();
     }
 
     // ノード間のリンクを作成するメソッド
@@ -106,12 +127,13 @@ public class NodeManager : MonoBehaviour
     // ノード名を編集するメソッド
     public void EditNodeName()
     {
-        if (selectedNode != null)
+        foreach (var node in selectedNodes)
         {
-            NodeData nodeData = selectedNode.GetComponent<NodeData>();
+            NodeData nodeData = node.GetComponent<NodeData>();
             nodeData.nodeName = nodeNameInputField.text;
-            outputMessage.text = "ノード名を更新しました。";
         }
+        outputMessage.text = "選択されたノードの名前を更新しました。";
+        UpdateOutputMessage();
     }
 
     // 編集モードの切り替え
@@ -150,13 +172,22 @@ public class NodeManager : MonoBehaviour
 
                 if (clickedNode != null && nodes.Contains(clickedNode))
                 {
-                    // ノードが選択されたので選択されたノードを保存
-                    SelectNode(clickedNode);
-
-                    // メッセージ表示
-                    outputMessage.text = "選択されたノード: " + selectedNode.name;
+                    bool isCtrlPressed = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+                    SelectNode(clickedNode, isCtrlPressed);
                 }
             }
+        }
+    }
+
+    private void UpdateOutputMessage()
+    {
+        if (selectedNodes.Count == 0)
+        {
+            outputMessage.text = "選択されたノードはありません。";
+        }
+        else
+        {
+            outputMessage.text = "選択されたノード: " + string.Join(", ", selectedNodes.ConvertAll(node => node.name));
         }
     }
 
@@ -167,9 +198,9 @@ public class NodeManager : MonoBehaviour
     }
 
     // 選択されているノードを取得するプロパティ
-    public GameObject SelectedNode
+    public List<GameObject> SelectedNodes
     {
-        get { return selectedNode; }
+        get { return selectedNodes; }
     }
 
     // メインノードを取得するプロパティ
