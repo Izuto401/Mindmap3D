@@ -35,7 +35,7 @@ public class NodeManager : MonoBehaviour
     private GameObject selectedNode;
 
     // 編集モードのフラグ
-    private bool isEditMode = false;
+    private bool isEditMode = true;
 
     void Start()
     {
@@ -43,8 +43,14 @@ public class NodeManager : MonoBehaviour
         mainNode = Instantiate(nodePrefab, nodeContainer);
         nodes.Add(mainNode);
 
-        // 初期状態では編集モードをオフに
-        ToggleUIVisibility(false);
+        // 初期状態ではUIをonに
+        ToggleUIVisibility(true);
+    }
+
+    void Update()
+    {
+        // ノードクリック検出
+        DetectNodeClick();
     }
 
     // 新しいノードを追加するメソッド
@@ -129,6 +135,31 @@ public class NodeManager : MonoBehaviour
         editModeUIPanel.SetActive(isVisible);
     }
 
+    // ノードがクリックされたかを検出するメソッド
+    private void DetectNodeClick()
+    {
+        if (Input.GetMouseButtonDown(0)) // 左クリック
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                // クリックされたオブジェクトがノードかどうか
+                GameObject clickedNode = hit.transform.gameObject;
+
+                if (clickedNode != null && nodes.Contains(clickedNode))
+                {
+                    // ノードが選択されたので選択されたノードを保存
+                    SelectNode(clickedNode);
+
+                    // メッセージ表示
+                    outputMessage.text = "選択されたノード: " + selectedNode.name;
+                }
+            }
+        }
+    }
+
     // すべてのノードを取得するプロパティ
     public List<GameObject> Nodes
     {
@@ -139,5 +170,11 @@ public class NodeManager : MonoBehaviour
     public GameObject SelectedNode
     {
         get { return selectedNode; }
+    }
+
+    // メインノードを取得するプロパティ
+    public GameObject MainNode
+    {
+        get { return mainNode; }
     }
 }
