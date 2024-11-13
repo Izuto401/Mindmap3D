@@ -86,10 +86,32 @@ public class NodeManager : MonoBehaviour
         foreach (var node in selectedNodes)
         {
             nodes.Remove(node);
+            RemoveNodeLinks(node);
             Destroy(node);
         }
         selectedNodes.Clear();
         UpdateOutputMessage();
+    }
+
+    // ノードの関連リンクを削除するメソッド
+    private void RemoveNodeLinks(GameObject node)
+    {
+        List<GameObject> linksToRemove = new List<GameObject>();
+
+        foreach (var link in nodeLinks)
+        {
+            LineRenderer lineRenderer = link.GetComponent<LineRenderer>();
+            if (lineRenderer.GetPosition(0) == node.transform.position || lineRenderer.GetPosition(1) == node.transform.position)
+            {
+                linksToRemove.Add(link);
+            }
+        }
+
+        foreach (var link in linksToRemove)
+        {
+            nodeLinks.Remove(link);
+            Destroy(link);
+        }
     }
 
     // ノードを選択するメソッド
