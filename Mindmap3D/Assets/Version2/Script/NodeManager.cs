@@ -57,7 +57,7 @@ public class NodeManager : MonoBehaviour
     // 新しいノードを追加するメソッド
     public void AddNode()
     {
-        Vector3 randomPosition = new Vector3(Random.Range(-100f, 100f), Random.Range(-100f, 100f), Random.Range(-100f, 100f));
+        Vector3 randomPosition = new Vector3(Random.Range(-100f, 100f), Random.Range(-100f, 100f), Random.Range(-1f, 1f));
         AddNode(randomPosition);
     }
 
@@ -108,8 +108,15 @@ public class NodeManager : MonoBehaviour
         }
         else
         {
-            selectedNodes.Clear();
-            selectedNodes.Add(node);
+            if (selectedNodes.Contains(node))
+            {
+                selectedNodes.Remove(node);
+            }
+            else
+            {
+                selectedNodes.Clear();
+                selectedNodes.Add(node);
+            }
         }
         UpdateOutputMessage();
     }
