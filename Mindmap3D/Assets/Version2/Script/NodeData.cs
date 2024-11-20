@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-// スクリプタブルオブジェクトとして作成
-[CreateAssetMenu(fileName = "NodeData", menuName = "ScriptableObjects/NodeData", order = 1)]
-public class NodeData : ScriptableObject
+public class NodeData : MonoBehaviour
 {
     // ノードの識別子
     public int nodeId;

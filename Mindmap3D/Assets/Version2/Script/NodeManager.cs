@@ -38,6 +38,9 @@ public class NodeManager : MonoBehaviour
     // 編集モードのフラグ
     private bool isEditMode = true;
 
+    private int currentDepth = 0; // 現在の階層を管理
+    private const float nodeDistanceIncrement = 100f; // 階層ごとの距離増分
+
     void Start()
     {
         // メインノードを初期化
@@ -57,7 +60,8 @@ public class NodeManager : MonoBehaviour
     // 新しいノードを追加するメソッド
     public void AddNode()
     {
-        Vector3 randomPosition = new Vector3(Random.Range(-100f, 100f), Random.Range(-100f, 100f), Random.Range(-1f, 1f));
+        // メインノードの位置を中心に、外側に発散するランダム位置を計算
+        Vector3 randomPosition = GetPositionAroundMainNode();
         AddNode(randomPosition);
     }
 
@@ -76,19 +80,62 @@ public class NodeManager : MonoBehaviour
                 CreateLink(selectedNode, newNode);
             }
         }
+        else
+        {
+            // 新しいノードをメインノードにリンクする場合、階層を更新
+            CreateLink(mainNode, newNode);
+            currentDepth++; // 新しい階層に進む
+        }
 
         return newNode;
     }
 
+    // メインノードの周囲にランダムな位置を計算するメソッド (方向性を統一)
+    private Vector3 GetPositionAroundMainNode()
+    {
+        // 現在の階層の半径を計算
+        float radius = (currentDepth + 1) * nodeDistanceIncrement;
+
+        // ランダムな方向を取得 (2D平面の場合はY軸を固定)
+        float angle = Random.Range(0f, 360f);
+        float x = Mathf.Cos(angle * Mathf.Deg2Rad) * radius;
+        float y = Mathf.Sin(angle * Mathf.Deg2Rad) * radius;
+
+        // メインノードの位置を基準に計算
+        Vector3 mainNodePosition = mainNode.transform.position;
+        Vector3 randomPosition = mainNodePosition + new Vector3(x, y, 0);
+
+        return randomPosition;
+    }
+
+
     // ノードを削除するメソッド
     public void RemoveNode()
     {
+        // 削除対象のリストを保持
+        List<GameObject> nodesToRemove = new List<GameObject>();
+
         foreach (var node in selectedNodes)
+        {
+            if (node == mainNode)
+            {
+                // メインノードの場合は削除せずメッセージを表示
+                outputMessage.text = "メインノードは削除できません。";
+                Debug.Log("Attempted to delete the main node, which is not allowed.");
+                continue;
+            }
+
+            nodesToRemove.Add(node);
+        }
+
+        // 削除処理
+        foreach (var node in nodesToRemove)
         {
             nodes.Remove(node);
             RemoveNodeLinks(node);
             Destroy(node);
         }
+
         selectedNodes.Clear();
         UpdateOutputMessage();
     }
@@ -140,6 +187,13 @@ public class NodeManager : MonoBehaviour
                 selectedNodes.Add(node);
             }
         }
+
+        // 選択されたノードが一つの場合、その名前を入力フィールドに設定
+        if (selectedNodes.Count == 1)
+        {
+            NodeData nodeData = selectedNodes[0].GetComponent<NodeData>();
+            nodeNameInputField.text = nodeData.nodeName;
+        }
         UpdateOutputMessage();
     }
 
@@ -156,10 +210,21 @@ public class NodeManager : MonoBehaviour
     // ノード名を編集するメソッド
     public void EditNodeName()
     {
+        string newName = nodeNameInputField.text;
+        Debug.Log("New name from input field: " + newName); // デバッグ用ログ
+
         foreach (var node in selectedNodes)
         {
             NodeData nodeData = node.GetComponent<NodeData>();
-            nodeData.nodeName = nodeNameInputField.text;
+            nodeData.nodeName = newName;
+            Debug.Log("Node updated: " + nodeData.nodeName); // デバッグ用ログ
+
+            // ノードに関連付けられたテキスト表示コンポーネントも更新する
+            TextMeshProUGUI nodeText = node.GetComponentInChildren<TextMeshProUGUI>();
+            if (nodeText != null)
+            {
+                nodeText.text = newName;
+            }
         }
         outputMessage.text = "選択されたノードの名前を更新しました。";
         UpdateOutputMessage();
