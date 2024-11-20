@@ -5,10 +5,10 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     // カメラの回転速度
-    public float rotateSpeed = 5f;
+    public float rotateSpeed = 50f;
 
     // カメラのズーム速度
-    public float zoomSpeed = 5f;
+    public float zoomSpeed = 50f;
 
     // ノードマネージャーの参照
     private NodeManager nodeManager;
@@ -25,7 +25,14 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         // 選択されたノードの更新
-        selectedNode = nodeManager.SelectedNode?.transform;
+        if (nodeManager.SelectedNodes.Count > 0)
+        {
+            selectedNode = nodeManager.SelectedNodes[0].transform;
+        }
+        else
+        {
+            selectedNode = null;
+        }
 
         // スワイプでカメラの角度変更
         if (Input.GetMouseButton(1) && selectedNode == null)
