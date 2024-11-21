@@ -6,6 +6,9 @@ using TMPro;
 
 public class NodeManager : MonoBehaviour
 {
+    // NodeManager.csの冒頭にRandomIdeaGeneratorを参照する部分を追加
+    public RandomIdeaGenerator randomIdeaGenerator;
+
     // ノードとリンクのプレハブを参照
     public GameObject nodePrefab;
     public GameObject linkPrefab;
@@ -41,6 +44,7 @@ public class NodeManager : MonoBehaviour
     private int currentDepth = 0; // 現在の階層を管理
     private const float nodeDistanceIncrement = 100f; // 階層ごとの距離増分
 
+    // NodeManagerのStartメソッド内にRandomIdeaGeneratorの初期化を追加
     void Start()
     {
         // メインノードを初期化
@@ -49,6 +53,9 @@ public class NodeManager : MonoBehaviour
 
         // 初期状態ではUIをonに
         ToggleUIVisibility(true);
+
+        // RandomIdeaGeneratorの参照を設定
+        randomIdeaGenerator.nodeManager = this;
     }
 
     void Update()
