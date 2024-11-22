@@ -44,6 +44,10 @@ public class NodeManager : MonoBehaviour
     private int currentDepth = 0; // 現在の階層を管理
     private const float nodeDistanceIncrement = 100f; // 階層ごとの距離増分
 
+    private Dictionary<GameObject, GameObject> parentMap = new Dictionary<GameObject, GameObject>(); // ノードの親子関係を管理する辞書
+    private Dictionary<GameObject, List<GameObject>> childrenMap = new Dictionary<GameObject, List<GameObject>>(); // ノードの親子関係を管理する辞書
+
+
     // NodeManagerのStartメソッド内にRandomIdeaGeneratorの初期化を追加
     void Start()
     {
@@ -56,6 +60,11 @@ public class NodeManager : MonoBehaviour
 
         // RandomIdeaGeneratorの参照を設定
         randomIdeaGenerator.nodeManager = this;
+
+        // ノードデータの設定
+        NodeData mainNodeData = mainNode.GetComponent<NodeData>();
+        mainNodeData.nodeName = "メインノード";
+        mainNodeData.nodeId = 0; // 任意のID設定
     }
 
     void Update()
@@ -79,19 +88,29 @@ public class NodeManager : MonoBehaviour
         newNode.transform.position = position;
         nodes.Add(newNode);
 
+        NodeData newNodeData = newNode.GetComponent<NodeData>();
+        newNodeData.nodeName = "ノード" + nodes.Count; // 名前設定
+        newNodeData.nodeId = nodes.Count; // 任意のID設定
+        Debug.Log($"ノード追加: {newNodeData.nodeName} (ID: {newNodeData.nodeId})");
+
+
         // 選択されているノードがある場合、リンクを作成
         if (selectedNodes.Count > 0)
         {
             foreach (var selectedNode in selectedNodes)
             {
                 CreateLink(selectedNode, newNode);
+                SetParent(selectedNode, newNode); // 親子関係を設定
+                Debug.Log($"リンク作成: 親 {selectedNode.GetComponent<NodeData>().nodeName} - 子 {newNodeData.nodeName}");
             }
         }
         else
         {
             // 新しいノードをメインノードにリンクする場合、階層を更新
             CreateLink(mainNode, newNode);
+            SetParent(mainNode, newNode); // 親子関係を設定
             currentDepth++; // 新しい階層に進む
+            Debug.Log($"リンク作成: 親 {mainNode.GetComponent<NodeData>().nodeName} - 子 {newNodeData.nodeName}");
         }
 
         return newNode;
@@ -292,6 +311,29 @@ public class NodeManager : MonoBehaviour
         }
     }
 
+    // 親子関係を設定するメソッド
+    private void SetParent(GameObject parent, GameObject child)
+    {
+        if (!childrenMap.ContainsKey(parent))
+        {
+            childrenMap[parent] = new List<GameObject>();
+        }
+        childrenMap[parent].Add(child);
+        parentMap[child] = parent;
+    }
+
+    // 指定されたノードの親ノードを取得するメソッド
+    public GameObject GetParentNode(GameObject node)
+    {
+        return parentMap.ContainsKey(node) ? parentMap[node] : null;
+    }
+
+    // 指定されたノードの子ノードを取得するメソッド
+    public List<GameObject> GetChildNodes(GameObject node)
+    {
+        return childrenMap.ContainsKey(node) ? childrenMap[node] : new List<GameObject>();
+    }
+
     // すべてのノードを取得するプロパティ
     public List<GameObject> Nodes
     {
@@ -308,5 +350,11 @@ public class NodeManager : MonoBehaviour
     public GameObject MainNode
     {
         get { return mainNode; }
+    }
+
+    // すべてのリンクを取得するプロパティ
+    public List<GameObject> Links
+    {
+        get { return nodeLinks; }
     }
 }
