@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class ContextNodeDisplay : MonoBehaviour
 {
-    public NodeManager nodeManager;
-    public GameObject contextNodeContainer;
+    public NodeManager nodeManager; // NodeManagerの参照
+    public GameObject contextNodeContainer; // コンテクストノードを格納するコンテナ
+    public GameObject linkPrefab; // リンクのプレハブ
 
-    private GameObject selectedNode;
+    private GameObject selectedNode; // 選択されたノード
     private float distanceMultiplier = 200.0f; // ノード同士の距離を調整するための倍率
-    private List<GameObject> allNodes = new List<GameObject>();
-    private List<GameObject> allLinks = new List<GameObject>();
-    private List<GameObject> contextNodes = new List<GameObject>();
-    private List<GameObject> contextLinks = new List<GameObject>();
+    private List<GameObject> allNodes = new List<GameObject>(); // すべてのノード
+    private List<GameObject> allLinks = new List<GameObject>(); // すべてのリンク
+    private List<GameObject> contextNodes = new List<GameObject>(); // コンテクストノード
+    private List<GameObject> contextLinks = new List<GameObject>(); // コンテクストリンク
 
-    private bool isContextDisplayed = false;
+    private bool isContextDisplayed = false; // コンテクスト表示フラグ
 
     void Start()
     {
@@ -32,7 +33,6 @@ public class ContextNodeDisplay : MonoBehaviour
         }
 
         isContextDisplayed = true;
-        Debug.Log("DisplayContext");
         selectedNode = node;
         ClearContextDisplay();
 
@@ -40,34 +40,29 @@ public class ContextNodeDisplay : MonoBehaviour
         HideAllNodes();
         HideAllLinks();
 
-        GameObject parentNode = nodeManager.GetParentNode(node);
-        List<GameObject> childNodes = nodeManager.GetChildNodes(node);
-
-        //Debug.Log($"選択ノード: {node.GetComponent<NodeData>().nodeName}");
+        GameObject parentNode = nodeManager.GetParentNode(node); // 親ノードを取得
+        List<GameObject> childNodes = nodeManager.GetChildNodes(node); // 子ノードを取得
 
         // 親ノードを表示
         if (parentNode != null)
         {
-            DisplayNode(parentNode, new Vector3(0, 1 * distanceMultiplier, 0)); // 上に表示
-            CreateLink(parentNode, node);
-            //Debug.Log($"親ノード: {parentNode.GetComponent<NodeData>().nodeName}");
+            DisplayNode(parentNode, new Vector3(0, distanceMultiplier, 0)); // 上に表示
+            contextLinks.Add(CreateLink(parentNode, node)); // リンクを作成してリストに追加
         }
 
         // 選択されたノードを表示
         DisplayNode(node, Vector3.zero); // 中央に表示
 
         // 子ノードを表示
-        float angleStep = 360.0f / (childNodes.Count + 1);
+        float spacing = distanceMultiplier; // 子ノード間の間隔を設定
         for (int i = 0; i < childNodes.Count; i++)
         {
-            float angle = (i + 1) * angleStep;
             Vector3 childPosition = new Vector3(
-                Mathf.Cos(angle * Mathf.Deg2Rad) * distanceMultiplier,
-                -1 * distanceMultiplier,
-                Mathf.Sin(angle * Mathf.Deg2Rad) * distanceMultiplier); // 下に円形に表示
+                (i - (childNodes.Count - 1) / 2.0f) * spacing, // x軸に一定の間隔で配置
+                -distanceMultiplier, // y軸に一定の距離
+                0); // z軸は0に設定
             DisplayNode(childNodes[i], childPosition);
-            CreateLink(node, childNodes[i]);
-            //Debug.Log($"子ノード: {childNodes[i].GetComponent<NodeData>().nodeName}");
+            contextLinks.Add(CreateLink(node, childNodes[i])); // リンクを作成してリストに追加
         }
 
         // コンテクストノードとリンクのリストを更新
@@ -80,21 +75,20 @@ public class ContextNodeDisplay : MonoBehaviour
     private void DisplayNode(GameObject node, Vector3 position)
     {
         GameObject newNode = Instantiate(node, contextNodeContainer.transform);
-        newNode.transform.localPosition = position;
+        newNode.transform.localPosition = position; // 指定された位置に配置
         newNode.SetActive(true); // 表示
-        contextNodes.Add(newNode); // 追加：コンテクストノードリストに追加
-        //Debug.Log($"ノード表示: {node.GetComponent<NodeData>().nodeName} at {position}");
+        contextNodes.Add(newNode); // コンテクストノードリストに追加
     }
 
     // リンクを作成するメソッド
-    private void CreateLink(GameObject parent, GameObject child)
+    private GameObject CreateLink(GameObject parent, GameObject child)
     {
-        GameObject newLink = Instantiate(nodeManager.linkPrefab, contextNodeContainer.transform);
+        GameObject newLink = Instantiate(linkPrefab, contextNodeContainer.transform);
         LineRenderer lineRenderer = newLink.GetComponent<LineRenderer>();
-        lineRenderer.SetPosition(0, parent.transform.localPosition);
-        lineRenderer.SetPosition(1, child.transform.localPosition);
-        contextLinks.Add(newLink); // コンテクストリンクリストに追加
-        Debug.Log($"リンク作成: {parent.GetComponent<NodeData>().nodeName} -> {child.GetComponent<NodeData>().nodeName}");
+        lineRenderer.positionCount = 2;
+        lineRenderer.SetPosition(0, parent.transform.localPosition); // 親ノードの位置に設定
+        lineRenderer.SetPosition(1, child.transform.localPosition); // 子ノードの位置に設定
+        return newLink; // 作成したリンクを返す
     }
 
     // コンテクスト表示をクリアするメソッド
@@ -102,11 +96,10 @@ public class ContextNodeDisplay : MonoBehaviour
     {
         foreach (Transform child in contextNodeContainer.transform)
         {
-            Destroy(child.gameObject);
+            Destroy(child.gameObject); // コンテクストノードとリンクを削除
         }
-        contextNodes.Clear();
-        contextLinks.Clear();
-        Debug.Log("コンテクスト表示をクリア");
+        contextNodes.Clear(); // コンテクストノードリストをクリア
+        contextLinks.Clear(); // コンテクストリンクリストをクリア
     }
 
     // すべてのノードを非表示にするメソッド
@@ -114,8 +107,7 @@ public class ContextNodeDisplay : MonoBehaviour
     {
         foreach (GameObject node in allNodes)
         {
-            node.SetActive(false);
-            Debug.Log($"HideAllNodes: ノード非表示: {node.GetComponent<NodeData>().nodeName}");
+            node.SetActive(false); // ノードを非表示
         }
     }
 
@@ -124,8 +116,7 @@ public class ContextNodeDisplay : MonoBehaviour
     {
         foreach (GameObject link in allLinks)
         {
-            link.SetActive(false);
-            Debug.Log($"HideAllLinks: リンク非表示: {link.name}");
+            link.SetActive(false); // リンクを非表示
         }
     }
 
@@ -136,24 +127,23 @@ public class ContextNodeDisplay : MonoBehaviour
         ShowAllNodes();
         ShowAllLinks();
         isContextDisplayed = false; // フラグをリセット
-        Debug.Log("ResetContextDisplay: すべてのノードとリンクを再表示");
     }
 
+    // すべてのノードを再表示するメソッド
     private void ShowAllNodes()
     {
         foreach (GameObject node in allNodes)
         {
-            node.SetActive(true);
-            Debug.Log($"ShowAllNodes: ノード再表示: {node.GetComponent<NodeData>().nodeName}");
+            node.SetActive(true); // ノードを再表示
         }
     }
 
+    // すべてのリンクを再表示するメソッド
     private void ShowAllLinks()
     {
         foreach (GameObject link in allLinks)
         {
-            link.SetActive(true);
-            Debug.Log($"ShowAllLinks: リンク再表示: {link.name}");
+            link.SetActive(true); // リンクを再表示
         }
     }
 }

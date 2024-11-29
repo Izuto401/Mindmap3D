@@ -8,13 +8,6 @@ public class ContextDisplayButton : MonoBehaviour
     public ContextNodeDisplay contextNodeDisplay; // ContextNodeDisplayスクリプトへの参照
     public NodeManager nodeManager; // NodeManagerスクリプトへの参照
 
-    private void Start()
-    {
-        // ボタンのクリックイベントを設定
-        Button button = GetComponent<Button>();
-        button.onClick.AddListener(OnButtonClick);
-    }
-
     public void OnButtonClick()
     {
         Debug.Log("Button clicked");
