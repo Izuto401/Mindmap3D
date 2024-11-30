@@ -1734,6 +1734,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeManager: {fileID: 874454857}
   contextNodeContainer: {fileID: 408233803}
+  linkPrefab: {fileID: 1827119839335319209, guid: 99e61fea967fd4bf99d90ca93641c10d, type: 3}
 --- !u!1 &468889984
 GameObject:
   m_ObjectHideFlags: 0
@@ -2148,6 +2149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeManager: {fileID: 874454857}
   contextNodeContainer: {fileID: 0}
+  linkPrefab: {fileID: 0}
 --- !u!1 &603308677
 GameObject:
   m_ObjectHideFlags: 0
