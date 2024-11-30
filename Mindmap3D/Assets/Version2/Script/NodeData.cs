@@ -24,4 +24,10 @@ public class NodeData : MonoBehaviour
     public float positionX;
     public float positionY;
     public float positionZ;
+
+    void Start()
+    {
+        creationDate = DateTime.Now;
+        updateDate = DateTime.Now;
+    }
 }
