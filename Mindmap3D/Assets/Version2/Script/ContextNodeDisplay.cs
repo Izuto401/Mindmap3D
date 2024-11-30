@@ -47,7 +47,7 @@ public class ContextNodeDisplay : MonoBehaviour
         if (parentNode != null)
         {
             DisplayNode(parentNode, new Vector3(0, distanceMultiplier, 0)); // 上に表示
-            contextLinks.Add(CreateLink(parentNode, node)); // リンクを作成してリストに追加
+            contextLinks.Add(CreateLink(parentNode, node, new Vector3(0, distanceMultiplier, 0))); // リンクを作成してリストに追加
         }
 
         // 選択されたノードを表示
@@ -62,7 +62,7 @@ public class ContextNodeDisplay : MonoBehaviour
                 -distanceMultiplier, // y軸に一定の距離
                 0); // z軸は0に設定
             DisplayNode(childNodes[i], childPosition);
-            contextLinks.Add(CreateLink(node, childNodes[i])); // リンクを作成してリストに追加
+            contextLinks.Add(CreateLink(parentNode, childNodes[i], childPosition)); // リンクを作成してリストに追加
         }
 
         // コンテクストノードとリンクのリストを更新
@@ -80,14 +80,14 @@ public class ContextNodeDisplay : MonoBehaviour
         contextNodes.Add(newNode); // コンテクストノードリストに追加
     }
 
-    // リンクを作成するメソッド
-    private GameObject CreateLink(GameObject parent, GameObject child)
+    // リンクを作成するメソッド（座標を引数に追加）
+    private GameObject CreateLink(GameObject parent, GameObject child, Vector3 childPosition)
     {
         GameObject newLink = Instantiate(linkPrefab, contextNodeContainer.transform);
         LineRenderer lineRenderer = newLink.GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, parent.transform.localPosition); // 親ノードの位置に設定
-        lineRenderer.SetPosition(1, child.transform.localPosition); // 子ノードの位置に設定
+        lineRenderer.SetPosition(1, childPosition); // 子ノードの位置に設定
         return newLink; // 作成したリンクを返す
     }
 
