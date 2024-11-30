@@ -307,9 +307,10 @@ public class NodeManager : MonoBehaviour
         }
         else
         {
-            outputMessage.text = "選択されたノード: " + string.Join(", ", selectedNodes.ConvertAll(node => node.name));
+            outputMessage.text = "選択されたノード: " + string.Join(", ", selectedNodes.ConvertAll(node => node.GetComponent<NodeData>().nodeName));
         }
     }
+
 
     // 親子関係を設定するメソッド
     private void SetParent(GameObject parent, GameObject child)
