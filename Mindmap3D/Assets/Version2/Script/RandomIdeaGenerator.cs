@@ -15,19 +15,6 @@ public class RandomIdeaGenerator : MonoBehaviour
 
     void Start()
     {
-        if (numberDisplay == null)
-        {
-            Debug.LogError("numberDisplay is not assigned.");
-        }
-        if (ideaOutputField == null)
-        {
-            Debug.LogError("ideaOutputField is not assigned.");
-        }
-        if (nodeManager == null)
-        {
-            Debug.LogError("nodeManager is not assigned.");
-        }
-
         UpdateNumberDisplay();
     }
 
