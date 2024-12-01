@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -91,6 +92,8 @@ public class NodeManager : MonoBehaviour
         NodeData newNodeData = newNode.GetComponent<NodeData>();
         newNodeData.nodeName = "ノード" + nodes.Count; // 名前設定
         newNodeData.nodeId = nodes.Count; // 任意のID設定
+        newNodeData.creationDate = DateTime.Now; // 生成時間の設定
+        newNodeData.updateDate = DateTime.Now; // 更新時間の設定
         Debug.Log($"ノード追加: {newNodeData.nodeName} (ID: {newNodeData.nodeId})");
 
 
@@ -123,7 +126,7 @@ public class NodeManager : MonoBehaviour
         float radius = (currentDepth + 1) * nodeDistanceIncrement;
 
         // ランダムな方向を取得 (2D平面の場合はY軸を固定)
-        float angle = Random.Range(0f, 360f);
+        float angle = UnityEngine.Random.Range(0f, 360f);
         float x = Mathf.Cos(angle * Mathf.Deg2Rad) * radius;
         float y = Mathf.Sin(angle * Mathf.Deg2Rad) * radius;
 
@@ -243,6 +246,7 @@ public class NodeManager : MonoBehaviour
         {
             NodeData nodeData = node.GetComponent<NodeData>();
             nodeData.nodeName = newName;
+            nodeData.updateDate = DateTime.Now; // 更新時間の設定
             Debug.Log("Node updated: " + nodeData.nodeName); // デバッグ用ログ
 
             // ノードに関連付けられたテキスト表示コンポーネントも更新する
