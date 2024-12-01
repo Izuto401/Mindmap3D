@@ -5,6 +5,12 @@ using System;
 
 public class NodeData : MonoBehaviour
 {
+    void Start()
+    {
+        creationDate = DateTime.Now;
+        updateDate = DateTime.Now;
+    }
+
     // ノードの識別子
     public int nodeId;
 
@@ -24,10 +30,4 @@ public class NodeData : MonoBehaviour
     public float positionX;
     public float positionY;
     public float positionZ;
-
-    void Start()
-    {
-        creationDate = DateTime.Now;
-        updateDate = DateTime.Now;
-    }
 }
