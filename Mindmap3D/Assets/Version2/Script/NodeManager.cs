@@ -43,7 +43,7 @@ public class NodeManager : MonoBehaviour
     private bool isEditMode = true;
 
     private int currentDepth = 0; // 現在の階層を管理
-    private const float nodeDistanceIncrement = 100f; // 階層ごとの距離増分
+    private const float nodeDistanceIncrement = 300f; // 階層ごとの距離増分
 
     private Dictionary<GameObject, GameObject> parentMap = new Dictionary<GameObject, GameObject>(); // ノードの親子関係を管理する辞書
     private Dictionary<GameObject, List<GameObject>> childrenMap = new Dictionary<GameObject, List<GameObject>>(); // ノードの親子関係を管理する辞書
@@ -56,6 +56,13 @@ public class NodeManager : MonoBehaviour
         mainNode = Instantiate(nodePrefab, nodeContainer);
         nodes.Add(mainNode);
 
+        // メインノードのRigidbodyを取得して固定
+        Rigidbody mainNodeRb = mainNode.GetComponent<Rigidbody>();
+        if (mainNodeRb != null)
+        {
+            mainNodeRb.isKinematic = true; // メインノードを固定
+        }
+
         // 初期状態ではUIをonに
         ToggleUIVisibility(true);
 
@@ -66,6 +73,8 @@ public class NodeManager : MonoBehaviour
         NodeData mainNodeData = mainNode.GetComponent<NodeData>();
         mainNodeData.nodeName = "メインノード";
         mainNodeData.nodeId = 0; // 任意のID設定
+
+        StartCoroutine(ResetNodeVelocities());
     }
 
     void Update()
@@ -88,6 +97,14 @@ public class NodeManager : MonoBehaviour
         GameObject newNode = Instantiate(nodePrefab, nodeContainer);
         newNode.transform.position = position;
         nodes.Add(newNode);
+
+        // ノードのRigidbody設定
+        Rigidbody nodeRb = newNode.GetComponent<Rigidbody>();
+        if (nodeRb != null)
+        {
+            nodeRb.velocity = Vector3.zero; // 初期速度をゼロに設定
+            nodeRb.angularVelocity = Vector3.zero; // 初期角速度をゼロに設定
+        }
 
         NodeData newNodeData = newNode.GetComponent<NodeData>();
         newNodeData.nodeName = "ノード" + nodes.Count; // 名前設定
@@ -129,10 +146,11 @@ public class NodeManager : MonoBehaviour
         float angle = UnityEngine.Random.Range(0f, 360f);
         float x = Mathf.Cos(angle * Mathf.Deg2Rad) * radius;
         float y = Mathf.Sin(angle * Mathf.Deg2Rad) * radius;
+        float z = Mathf.Tan(angle * Mathf.Deg2Rad) * radius;
 
         // メインノードの位置を基準に計算
         Vector3 mainNodePosition = mainNode.transform.position;
-        Vector3 randomPosition = mainNodePosition + new Vector3(x, y, 0);
+        Vector3 randomPosition = mainNodePosition + new Vector3(x, y, z);
 
         return randomPosition;
     }
@@ -361,5 +379,24 @@ public class NodeManager : MonoBehaviour
     public List<GameObject> Links
     {
         get { return nodeLinks; }
+    }
+
+    private IEnumerator ResetNodeVelocities()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(3f); // 1秒ごとにリセット
+
+            foreach (GameObject node in nodes)
+            {
+                Rigidbody rb = node.GetComponent<Rigidbody>();
+                if (rb != null && !rb.isKinematic)
+                {
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                    Debug.Log("rb.velocity = Vector3.zero;");
+                }
+            }
+        }
     }
 }
