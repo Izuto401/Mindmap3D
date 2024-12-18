@@ -34,7 +34,7 @@ public class CameraController : MonoBehaviour
             selectedNode = null;
         }
 
-        // スワイプでカメラの角度変更
+        // ノードを選択せずドラッグでカメラの角度変更
         if (Input.GetMouseButton(1) && selectedNode == null)
         {
             float h = rotateSpeed * Input.GetAxis("Mouse X");
