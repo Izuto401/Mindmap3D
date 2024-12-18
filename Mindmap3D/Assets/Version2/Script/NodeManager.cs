@@ -43,7 +43,7 @@ public class NodeManager : MonoBehaviour
     private bool isEditMode = true;
 
     private int currentDepth = 0; // 現在の階層を管理
-    private const float nodeDistanceIncrement = 100f; // 階層ごとの距離増分
+    private const float nodeDistanceIncrement = 200f; // 階層ごとの距離増分
 
     private Dictionary<GameObject, GameObject> parentMap = new Dictionary<GameObject, GameObject>(); // ノードの親子関係を管理する辞書
     private Dictionary<GameObject, List<GameObject>> childrenMap = new Dictionary<GameObject, List<GameObject>>(); // ノードの親子関係を管理する辞書
@@ -56,6 +56,13 @@ public class NodeManager : MonoBehaviour
         mainNode = Instantiate(nodePrefab, nodeContainer);
         nodes.Add(mainNode);
 
+        // メインノードのRigidbodyを取得して固定
+        Rigidbody mainNodeRb = mainNode.GetComponent<Rigidbody>();
+        if (mainNodeRb != null)
+        {
+            mainNodeRb.isKinematic = true; // メインノードを固定
+        }
+
         // 初期状態ではUIをonに
         ToggleUIVisibility(true);
 
@@ -66,12 +73,60 @@ public class NodeManager : MonoBehaviour
         NodeData mainNodeData = mainNode.GetComponent<NodeData>();
         mainNodeData.nodeName = "メインノード";
         mainNodeData.nodeId = 0; // 任意のID設定
+
+        StartCoroutine(ResetNodeVelocities());
     }
 
     void Update()
     {
         // ノードクリック検出
         DetectNodeClick();
+
+        // リンクの動的な更新
+        UpdateLinks();
+    }
+
+    void UpdateLinks()
+    {
+        foreach (var link in nodeLinks)
+        {
+            LineRenderer lineRenderer = link.GetComponent<LineRenderer>();
+            if (lineRenderer != null)
+            {
+                // リンクの両端のノードの位置を更新
+                Vector3 startNodePosition = lineRenderer.GetPosition(0); // リンクの始点位置
+                Vector3 endNodePosition = lineRenderer.GetPosition(1); // リンクの終点位置
+
+                // ノードのリストから近いノードを検索
+                GameObject startNode = FindNearestNode(startNodePosition);
+                GameObject endNode = FindNearestNode(endNodePosition);
+
+                if (startNode != null && endNode != null)
+                {
+                    lineRenderer.SetPosition(0, startNode.transform.position); // 親ノードの位置
+                    lineRenderer.SetPosition(1, endNode.transform.position); // 子ノードの位置
+                }
+            }
+        }
+    }
+
+    // 指定された位置に最も近いノードを検索するメソッド
+    GameObject FindNearestNode(Vector3 position)
+    {
+        GameObject nearestNode = null;
+        float minDistance = float.MaxValue;
+
+        foreach (GameObject node in nodes)
+        {
+            float distance = Vector3.Distance(node.transform.position, position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestNode = node;
+            }
+        }
+
+        return nearestNode;
     }
 
     // 新しいノードを追加するメソッド
@@ -88,6 +143,14 @@ public class NodeManager : MonoBehaviour
         GameObject newNode = Instantiate(nodePrefab, nodeContainer);
         newNode.transform.position = position;
         nodes.Add(newNode);
+
+        // ノードのRigidbody設定
+        Rigidbody nodeRb = newNode.GetComponent<Rigidbody>();
+        if (nodeRb != null)
+        {
+            nodeRb.velocity = Vector3.zero; // 初期速度をゼロに設定
+            nodeRb.angularVelocity = Vector3.zero; // 初期角速度をゼロに設定
+        }
 
         NodeData newNodeData = newNode.GetComponent<NodeData>();
         newNodeData.nodeName = "ノード" + nodes.Count; // 名前設定
@@ -129,10 +192,11 @@ public class NodeManager : MonoBehaviour
         float angle = UnityEngine.Random.Range(0f, 360f);
         float x = Mathf.Cos(angle * Mathf.Deg2Rad) * radius;
         float y = Mathf.Sin(angle * Mathf.Deg2Rad) * radius;
+        float z = Mathf.Tan(angle * Mathf.Deg2Rad) * radius;
 
         // メインノードの位置を基準に計算
         Vector3 mainNodePosition = mainNode.transform.position;
-        Vector3 randomPosition = mainNodePosition + new Vector3(x, y, 0);
+        Vector3 randomPosition = mainNodePosition + new Vector3(x, y, z);
 
         return randomPosition;
     }
@@ -361,5 +425,24 @@ public class NodeManager : MonoBehaviour
     public List<GameObject> Links
     {
         get { return nodeLinks; }
+    }
+
+    private IEnumerator ResetNodeVelocities()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(3f); // 1秒ごとにリセット
+
+            foreach (GameObject node in nodes)
+            {
+                Rigidbody rb = node.GetComponent<Rigidbody>();
+                if (rb != null && !rb.isKinematic)
+                {
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                    Debug.Log("rb.velocity = Vector3.zero;");
+                }
+            }
+        }
     }
 }
