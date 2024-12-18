@@ -43,7 +43,7 @@ public class NodeManager : MonoBehaviour
     private bool isEditMode = true;
 
     private int currentDepth = 0; // 現在の階層を管理
-    private const float nodeDistanceIncrement = 300f; // 階層ごとの距離増分
+    private const float nodeDistanceIncrement = 200f; // 階層ごとの距離増分
 
     private Dictionary<GameObject, GameObject> parentMap = new Dictionary<GameObject, GameObject>(); // ノードの親子関係を管理する辞書
     private Dictionary<GameObject, List<GameObject>> childrenMap = new Dictionary<GameObject, List<GameObject>>(); // ノードの親子関係を管理する辞書

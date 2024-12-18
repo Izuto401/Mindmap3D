@@ -1389,7 +1389,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 5000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -4098,6 +4098,7 @@ MonoBehaviour:
   nextButton: {fileID: 1402483727}
   backButton: {fileID: 1699625726}
   endTimelineMappingButton: {fileID: 1601702118}
+  currentIndex: 0
 --- !u!1 &1315447833
 GameObject:
   m_ObjectHideFlags: 0
