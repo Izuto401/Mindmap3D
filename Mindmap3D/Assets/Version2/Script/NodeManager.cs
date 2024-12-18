@@ -81,6 +81,52 @@ public class NodeManager : MonoBehaviour
     {
         // ノードクリック検出
         DetectNodeClick();
+
+        // リンクの動的な更新
+        UpdateLinks();
+    }
+
+    void UpdateLinks()
+    {
+        foreach (var link in nodeLinks)
+        {
+            LineRenderer lineRenderer = link.GetComponent<LineRenderer>();
+            if (lineRenderer != null)
+            {
+                // リンクの両端のノードの位置を更新
+                Vector3 startNodePosition = lineRenderer.GetPosition(0); // リンクの始点位置
+                Vector3 endNodePosition = lineRenderer.GetPosition(1); // リンクの終点位置
+
+                // ノードのリストから近いノードを検索
+                GameObject startNode = FindNearestNode(startNodePosition);
+                GameObject endNode = FindNearestNode(endNodePosition);
+
+                if (startNode != null && endNode != null)
+                {
+                    lineRenderer.SetPosition(0, startNode.transform.position); // 親ノードの位置
+                    lineRenderer.SetPosition(1, endNode.transform.position); // 子ノードの位置
+                }
+            }
+        }
+    }
+
+    // 指定された位置に最も近いノードを検索するメソッド
+    GameObject FindNearestNode(Vector3 position)
+    {
+        GameObject nearestNode = null;
+        float minDistance = float.MaxValue;
+
+        foreach (GameObject node in nodes)
+        {
+            float distance = Vector3.Distance(node.transform.position, position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestNode = node;
+            }
+        }
+
+        return nearestNode;
     }
 
     // 新しいノードを追加するメソッド
