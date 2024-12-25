@@ -23,10 +23,18 @@ public class CameraController : MonoBehaviour
     // ノード名入力フィールドの参照
     public TMP_InputField nodeNameInputField;
 
+    // カメラの初期位置と回転
+    private Vector3 initialPosition;
+    private Quaternion initialRotation;
+
     void Start()
     {
         // NodeManagerのインスタンスを取得
         nodeManager = FindObjectOfType<NodeManager>();
+
+        // カメラの初期位置と回転を保存
+        initialPosition = transform.position;
+        initialRotation = transform.rotation;
     }
 
     void Update()
@@ -81,5 +89,12 @@ public class CameraController : MonoBehaviour
             // 何も選択されていない時はその場でズーム
             transform.Translate(0, 0, scroll * zoomSpeed, Space.Self);
         }
+    }
+
+    // カメラの位置と回転を初期値にリセットするメソッド
+    public void ResetCameraPosition()
+    {
+        transform.position = initialPosition;
+        transform.rotation = initialRotation;
     }
 }
