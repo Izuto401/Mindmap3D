@@ -1437,6 +1437,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotateSpeed: 50
   zoomSpeed: 50
+  moveSpeed: 100
+  nodeNameInputField: {fileID: 1783190738}
 --- !u!114 &340819584
 MonoBehaviour:
   m_ObjectHideFlags: 0
