@@ -257,15 +257,19 @@ public class NodeManager : MonoBehaviour
     // ノードを選択するメソッド
     public void SelectNode(GameObject node, bool isCtrlPressed)
     {
+        NodeSelectionIndicator indicator = node.GetComponent<NodeSelectionIndicator>();
+
         if (isCtrlPressed)
         {
             if (selectedNodes.Contains(node))
             {
                 selectedNodes.Remove(node);
+                indicator?.HideIcon();
             }
             else
             {
                 selectedNodes.Add(node);
+                indicator?.ShowIcon();
             }
         }
         else
@@ -273,11 +277,13 @@ public class NodeManager : MonoBehaviour
             if (selectedNodes.Contains(node))
             {
                 selectedNodes.Remove(node);
+                indicator?.HideIcon();
             }
             else
             {
                 selectedNodes.Clear();
                 selectedNodes.Add(node);
+                indicator?.ShowIcon();
             }
         }
 
