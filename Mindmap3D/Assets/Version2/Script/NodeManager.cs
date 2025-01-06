@@ -259,33 +259,30 @@ public class NodeManager : MonoBehaviour
     {
         NodeSelectionIndicator indicator = node.GetComponent<NodeSelectionIndicator>();
 
-        if (isCtrlPressed)
+        if (selectedNodes.Contains(node))
         {
-            if (selectedNodes.Contains(node))
-            {
-                selectedNodes.Remove(node);
-                indicator?.HideIcon();
-            }
-            else
-            {
-                selectedNodes.Add(node);
-                indicator?.ShowIcon();
-            }
+            // 既に選択されていた場合は解除
+            selectedNodes.Remove(node);
+            indicator?.HideIcon();
         }
         else
         {
-            if (selectedNodes.Contains(node))
+            if (!isCtrlPressed)
             {
-                selectedNodes.Remove(node);
-                indicator?.HideIcon();
-            }
-            else
-            {
+                // Ctrlが押されていない場合、他のノードをすべて解除
+                foreach (var selected in selectedNodes)
+                {
+                    NodeSelectionIndicator selectedIndicator = selected.GetComponent<NodeSelectionIndicator>();
+                    selectedIndicator?.HideIcon();
+                }
                 selectedNodes.Clear();
-                selectedNodes.Add(node);
-                indicator?.ShowIcon();
             }
+
+            // 新しく選択
+            selectedNodes.Add(node);
+            indicator?.ShowIcon();
         }
+
 
         // 選択されたノードが一つの場合、その名前を入力フィールドに設定
         if (selectedNodes.Count == 1)
