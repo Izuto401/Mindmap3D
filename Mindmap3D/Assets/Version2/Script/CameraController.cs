@@ -97,4 +97,17 @@ public class CameraController : MonoBehaviour
         transform.position = initialPosition;
         transform.rotation = initialRotation;
     }
+
+    // ダブルクリックでカメラをノードの位置へ移動するメソッド
+    public void MoveCameraToNode(Vector3 nodePosition)
+    {
+        // カメラの目標位置を設定（ノードの x, y から -500 の位置）
+        Vector3 newCameraPosition = new Vector3(nodePosition.x, nodePosition.y, nodePosition.z - 500);
+
+        // カメラの位置を移動
+        transform.position = newCameraPosition;
+
+        // カメラの角度をリセット
+        transform.rotation = Quaternion.Euler(Vector3.zero);
+    }
 }

@@ -48,6 +48,8 @@ public class NodeManager : MonoBehaviour
     private Dictionary<GameObject, GameObject> parentMap = new Dictionary<GameObject, GameObject>(); // ノードの親子関係を管理する辞書
     private Dictionary<GameObject, List<GameObject>> childrenMap = new Dictionary<GameObject, List<GameObject>>(); // ノードの親子関係を管理する辞書
 
+    private float lastClickTime = 0f;
+    private float doubleClickThreshold = 0.3f; // ダブルクリックの判定時間
 
     // NodeManagerのStartメソッド内にRandomIdeaGeneratorの初期化を追加
     void Start()
@@ -364,7 +366,19 @@ public class NodeManager : MonoBehaviour
                 if (clickedNode != null && nodes.Contains(clickedNode))
                 {
                     bool isCtrlPressed = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
-                    SelectNode(clickedNode, isCtrlPressed);
+
+                    float timeSinceLastClick = Time.time - lastClickTime;
+                    lastClickTime = Time.time;
+
+                    if (timeSinceLastClick < doubleClickThreshold)
+                    {
+                        CameraController cameraController = FindObjectOfType<CameraController>();
+                        cameraController?.MoveCameraToNode(clickedNode.transform.position);
+                    }
+                    else
+                    {
+                        SelectNode(clickedNode, isCtrlPressed);
+                    }
                 }
             }
         }
