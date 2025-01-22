@@ -43,20 +43,12 @@ public class ContextNodeDisplay : MonoBehaviour
         GameObject parentNode = nodeManager.GetParentNode(node); // 親ノードを取得
         List<GameObject> childNodes = nodeManager.GetChildNodes(node); // 子ノードを取得
 
-        //// 親ノードを表示
-        //if (parentNode != null)
-        //{
-        //    DisplayNode(parentNode, new Vector3(0, distanceMultiplier, 0)); // 上に表示
-        //    contextLinks.Add(CreateLink(parentNode, node, new Vector3(0, distanceMultiplier, 0))); // リンクを作成してリストに追加
-        //}
-        // 親ノードを表示 (親がない場合はダミーオブジェクトを作成)
-        if (parentNode == null)
+        // 親ノードを表示
+        if (parentNode != null)
         {
-            parentNode = new GameObject("DummyParent");
-            parentNode.transform.SetParent(contextNodeContainer.transform);
-            parentNode.transform.localPosition = new Vector3(0, distanceMultiplier, 0);
+            DisplayNode(parentNode, new Vector3(0, distanceMultiplier, 0)); // 上に表示
+            contextLinks.Add(CreateLink(parentNode, node, new Vector3(0, distanceMultiplier, 0))); // リンクを作成してリストに追加
         }
-        
 
         // 選択されたノードを表示
         DisplayNode(node, Vector3.zero); // 中央に表示

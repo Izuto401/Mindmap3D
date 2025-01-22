@@ -188,9 +188,9 @@ public class NodeManager : MonoBehaviour
     private Vector3 GetPositionAroundMainNode()
     {
         // 現在の階層の半径を計算
-        float radius = (currentDepth + 1) * nodeDistanceIncrement * 0.5f;
+        float radius = (currentDepth + 1) * nodeDistanceIncrement;
 
-        // ランダムな方向を取得
+        // ランダムな方向を取得 (2D平面の場合はY軸を固定)
         float angle = UnityEngine.Random.Range(0f, 360f);
         float x = Mathf.Cos(angle * Mathf.Deg2Rad) * radius;
         float y = Mathf.Sin(angle * Mathf.Deg2Rad) * radius;
