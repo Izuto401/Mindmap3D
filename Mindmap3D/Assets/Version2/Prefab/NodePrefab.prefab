@@ -226,6 +226,7 @@ GameObject:
   - component: {fileID: -698546341743471385}
   - component: {fileID: 41189790019753167}
   - component: {fileID: 2015996425527990481}
+  - component: {fileID: 6620494792180589650}
   m_Layer: 5
   m_Name: NodePrefab
   m_TagString: Untagged
@@ -419,6 +420,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionIcon: {fileID: 8717608125506825022}
+--- !u!114 &6620494792180589650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5611036482316447899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 572f04308c2204401827f8416d270235, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7107043782176015927
 GameObject:
   m_ObjectHideFlags: 0
